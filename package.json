@@ -1,8 +1,5 @@
 {
-  "baseUrl":"src",
-  "paths":{
-    "@components/*":["src/app/components/*"]
-  },
+
   "name": "pago-paypal",
   "version": "0.1.0",
   "private": true,
