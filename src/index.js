@@ -9,11 +9,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const router = createBrowserRouter([
     {
-        path: "/payment",
+        path: "/",
 
         element:  <App />,
     },
-]);
+],{ basename: "/payment" });
 root.render(
   <React.StrictMode>
       <RouterProvider router={router} />
