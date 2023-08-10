@@ -3,7 +3,7 @@
   "name": "pago-paypal",
   "version": "0.1.0",
   "private": true,
-
+  "homepage": "/payment",
   "dependencies": {
     "@lottiefiles/react-lottie-player": "^3.5.3",
     "@paypal/react-paypal-js": "^8.1.1",
