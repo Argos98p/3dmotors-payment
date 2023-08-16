@@ -1,14 +1,18 @@
 import './App.css';
 import { PayPalScriptProvider, PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
-import { useState} from "react";
+import { useEffect, useState} from "react";
 
 import Lottie from "lottie-react";
 import failedAnimation from "./assets/lottie_animations/failed_payment.json";
 import successAnimation from "./assets/lottie_animations/successfully_payment.json";
+import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
 
 const style = {"color": "blue" ,"layout":"vertical"};
 
 function App() {
+
+
 
     const [paymentStatus, setPaymentStatus] = useState(3);
     /*
@@ -17,9 +21,33 @@ function App() {
      3:inprocess
      */
 
+
+     const [queryParameters] = useSearchParams();
+     const [price, setPrice] = useState(0);
+     const [usuarioId, setUsuarioId] = useState(0);
+
+
+     useEffect(() => {
+        const fetch = async () => {
+            const userId = queryParameters.get("idusuario");
+            setUsuarioId(userId);
+
+            try {
+              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos`);
+              setPrice(data)
+
+            } catch (err) {
+              console.error(err);
+            }
+          };
+          fetch();    
+     }, [])
+     
+
+
     function createOrder() {
         // replace this url with your server
-        return fetch("https://3dmotores.com/objects/orders?value=1.1", {
+        return fetch(`https://3dmotores.com/objects/orders?value=${price}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -42,7 +70,7 @@ function App() {
             });
     }
     function onError(data){
-        setPaymentStatus(0);
+        setPaymentStatus();
         console.log(data)
     }
     function onApprove(data) {
@@ -58,9 +86,15 @@ function App() {
             }),
         })
             .then((response) => response.json())
-            .then((orderData) => {
-                console.log(orderData)
-                setPaymentStatus(1);
+            .then(async (orderData) =>  {
+
+                const response = await axios.post(`http://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos`);
+
+                if (response.status === 200) {
+                    setPaymentStatus(1);
+                    // Aquí puedes realizar acciones adicionales si es necesario
+                }
+                
             });
     }
 
@@ -95,10 +129,21 @@ function App() {
 
               {
                   paymentStatus === 1 &&
-                  <Lottie animationData={successAnimation} loop={true} />
+                  <>
+                      <Lottie animationData={successAnimation} loop={true} />
+                      <h2>Compra existosa, puede regresar a la aplicación</h2>
+                                 
+                  </>
               }
               {
-                  paymentStatus === 0 && <Lottie animationData={failedAnimation} loop={true} />
+                  paymentStatus === 0 && 
+                  <>
+                        <Lottie animationData={failedAnimation} loop={true} />
+                        <h2>Erorr en el pago</h2>     
+                        
+                  </>
+                  
+                  
               }
 
           </div>
