@@ -73,29 +73,27 @@ function App() {
         setPaymentStatus();
         console.log(data)
     }
-    function onApprove(data) {
-        // replace this url with your server
+    async function  onApprove (data) {
+        try {
 
-        return fetch(`https://3dmotores.com/objects/orders/capture?orderid=${data.orderID}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+            const response =  await axios.post(`https://3dmotores.com/objects/orders/capture?orderid=${data.orderID}`,JSON.stringify({
                 orderID: data.orderID,
-            }),
-        })
-            .then((response) => response.json())
-            .then(async (orderData) =>  {
+            }),);
 
-                const response = await axios.post(`http://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos`);
-
+            if(response.status){
+                const response = await axios.post(`https://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos`);
                 if (response.status === 200) {
                     setPaymentStatus(1);
                     // Aquí puedes realizar acciones adicionales si es necesario
                 }
-                
-            });
+            }            
+        } catch (error) {
+            
+        }
+        
+
+        
+
     }
 
 // Custom component to wrap the PayPalButtons and show loading spinner
