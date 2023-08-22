@@ -13,7 +13,7 @@ const router = createBrowserRouter([
 
         element:  <App />,
     },
-],{ basename: "/" });
+],{ basename: "/payment" });
 root.render(
   <React.StrictMode>
       <RouterProvider router={router} />
