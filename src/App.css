@@ -1,18 +1,74 @@
+body{
+  background-color: rgba(5,25,34,255);
+}
 .paypal-container{
-  width: 100vw;
-  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.paypal-container>div{
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-image{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.paypal-container>div{
- width: 70vw;
+
+
+.logo-image>img{
+  margin: 40px;
+  width: 110px;
+  
 }
 
-@media (max-width: 399px) {
+.paypal-buttons{
+  min-width: 500px!important;
+}
+
+
+.infoProduct{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2em;
+}
+
+.infoProduct>img{
+  width: 70px;
+  flex: 1;
+  flex-basis: 20%;
+  border-radius: 0.7em;
+}
+
+.infoProduct>.info{
+  margin-left: 2em;
+  flex: 1;
+  flex-basis: 80%;
+}
+.infoProduct>.info>h3{
+  color: white;
+  font-size: 1.3em;
+  margin-bottom: 5px;
+}
+.infoProduct>.info>p{
+  color: rgb(145, 144, 144);
+  font-size: 1.3em;
+  margin: 0;
+}
+
+
+@media (max-width: 550px) {
   /* Aquí colocas las reglas CSS que deseas aplicar para dispositivos menores a 400px */
-  .paypal-container>div{
-    width: 95vw;
+  .paypal-buttons{
+    min-width: 300px!important;
   }
 }

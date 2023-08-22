@@ -8,6 +8,11 @@ import successAnimation from "./assets/lottie_animations/successfully_payment.js
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
+import forge from 'node-forge';
+
+
+
+
 const style = {"color": "blue" ,"layout":"vertical"};
 
 function App() {
@@ -29,7 +34,12 @@ function App() {
 
      useEffect(() => {
         const fetch = async () => {
+            
             const userId = queryParameters.get("idusuario");
+            console.log(userId);
+                
+
+
             setUsuarioId(userId);
 
             try {
@@ -115,13 +125,30 @@ function App() {
         );
     }
 
+    const infoProduct= ()=>{
+        return <div className='infoProduct'>
+            <img src='/auto.jpeg' alt="logo"/>
+            <div className='info'>
+                <h3>Vehiculo con logo</h3>
+                <p>$9.66</p>
+            </div>
+        </div>
+    }
+
 
     return (
       <div className={"paypal-container"}>
           <div>
+
+            <div className='logo-image'>
+                <img src='/logo.png' alt='logo'/> 
+            </div>
+
+                {infoProduct()}
+
               {
-                  paymentStatus === 3 && <PayPalScriptProvider options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID, components: "buttons", currency: "USD" }}>
-                      <ButtonWrapper showSpinner={true} />
+                  paymentStatus === 3 && <PayPalScriptProvider  options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID, components: "buttons", currency: "USD" }}>
+                      <ButtonWrapper   style={{width:"600px"}} showSpinner={true} />
                   </PayPalScriptProvider>
               }
 
