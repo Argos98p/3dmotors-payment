@@ -1,7 +1,7 @@
 {
 
   "name": "pago-paypal",
-  "homepage": ".",
+  "homepage": "payment",
   "version": "0.1.0",
 
   "private": true,
