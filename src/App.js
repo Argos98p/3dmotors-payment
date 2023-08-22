@@ -127,7 +127,7 @@ function App() {
 
     const infoProduct= ()=>{
         return <div className='infoProduct'>
-            <img src='/auto.jpeg' alt="logo"/>
+            <img src='/payment/auto.jpeg' alt="logo"/>
             <div className='info'>
                 <h3>Vehiculo con logo</h3>
                 <p>$9.66</p>
@@ -141,7 +141,7 @@ function App() {
           <div>
 
             <div className='logo-image'>
-                <img src='/logo.png' alt='logo'/> 
+                <img src='/payment/logo.png' alt='logo'/> 
             </div>
 
                 {infoProduct()}
