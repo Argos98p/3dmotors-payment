@@ -45,7 +45,7 @@ function App() {
             setUsuarioId(userId);
 
             try {
-              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos&?idobjeto=${objetoId}`);
+              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
               setPrice(data)
 
             } catch (err) {
