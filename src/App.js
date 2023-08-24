@@ -30,20 +30,22 @@ function App() {
      const [queryParameters] = useSearchParams();
      const [price, setPrice] = useState(0);
      const [usuarioId, setUsuarioId] = useState(0);
-
+     const [objetoId, setObjetoId] = useState(0);
 
      useEffect(() => {
         const fetch = async () => {
             
             const userId = queryParameters.get("idusuario");
+            const objetoId= queryParameters.get("idobjeto");
+
             console.log(userId);
                 
 
-
+            setObjetoId(objetoId);
             setUsuarioId(userId);
 
             try {
-              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos`);
+              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos&?idobjeto=${objetoId}`);
               setPrice(data)
 
             } catch (err) {
@@ -91,7 +93,7 @@ function App() {
             }),);
 
             if(response.status){
-                const response = await axios.post(`https://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos`);
+                const response = await axios.post(`https://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
                 if (response.status === 200) {
                     setPaymentStatus(1);
                     // Aquí puedes realizar acciones adicionales si es necesario
