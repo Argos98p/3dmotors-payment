@@ -38,16 +38,13 @@ function App() {
             const userId = queryParameters.get("idusuario");
             const objetoId= queryParameters.get("idobjeto");
         
-
-            console.log(userId);
-                
-
             setObjetoId(objetoId);
             setUsuarioId(userId);
 
             try {
-              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
-              setPrice(data)
+              const response = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
+              setPrice(response.data);
+              console.log(response.data);
 
             } catch (err) {
               console.error(err);
