@@ -37,6 +37,7 @@ function App() {
             
             const userId = queryParameters.get("idusuario");
             const objetoId= queryParameters.get("idobjeto");
+        
 
             console.log(userId);
                 
@@ -45,7 +46,7 @@ function App() {
             setUsuarioId(userId);
 
             try {
-              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
+              const { data } = await axios.get(`https://3dmotores.com/objects/getvaluetopay?idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
               setPrice(data)
 
             } catch (err) {
@@ -94,6 +95,7 @@ function App() {
 
             if(response.status){
                 const response = await axios.post(`https://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
+                console.log(response);
                 if (response.status === 200) {
                     setPaymentStatus(1);
                     // Aquí puedes realizar acciones adicionales si es necesario
@@ -131,8 +133,11 @@ function App() {
         return <div className='infoProduct'>
             <img src='/payment/auto.jpeg' alt="logo"/>
             <div className='info'>
-                <h3>Vehiculo con logo</h3>
-                <p>$9.66</p>
+                {
+                    (price>7.00)?<h3>Vehiculo con logo</h3>:<h3>Vehiculo </h3>
+                }
+                
+                <p>${`${price}`}</p>
             </div>
         </div>
     }
@@ -158,7 +163,7 @@ function App() {
                   paymentStatus === 1 &&
                   <>
                       <Lottie animationData={successAnimation} loop={true} />
-                      <h2>Compra existosa, puede regresar a la aplicación</h2>
+                      <h2 className='blanco'>Compra existosa, puede regresar a la aplicación</h2>
                                  
                   </>
               }
@@ -166,7 +171,7 @@ function App() {
                   paymentStatus === 0 && 
                   <>
                         <Lottie animationData={failedAnimation} loop={true} />
-                        <h2>Erorr en el pago</h2>     
+                        <h2 className='blanco'>Erorr en el pago</h2>     
                         
                   </>
                   
