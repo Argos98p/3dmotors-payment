@@ -57,7 +57,7 @@ function App() {
 
     function createOrder() {
         // replace this url with your server
-        return fetch(`https://3dmotores.com/objects/orders?value=${price}`, {
+        return fetch(`https://3dmotores.com/pagos/orders?value=${price}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -86,12 +86,12 @@ function App() {
     async function  onApprove (data) {
         try {
 
-            const response =  await axios.post(`https://3dmotores.com/objects/orders/capture?orderid=${data.orderID}`,JSON.stringify({
+            const response =  await axios.post(`https://3dmotores.com/pagos/orders/capture?orderid=${data.orderID}`,JSON.stringify({
                 orderID: data.orderID,
             }),);
 
             if(response.status){
-                const response = await axios.post(`https://3dmotores.com/objects/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
+                const response = await axios.post(`https://3dmotores.com/pagos/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
                 console.log(response);
                 if (response.status === 200) {
                     setPaymentStatus(1);
