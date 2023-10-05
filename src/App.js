@@ -31,15 +31,25 @@ function App() {
      const [price, setPrice] = useState(0);
      const [usuarioId, setUsuarioId] = useState(0);
      const [objetoId, setObjetoId] = useState(0);
+     const [paymentType, setPaymentType] = useState('single');
 
      useEffect(() => {
         const fetch = async () => {
             
             const userId = queryParameters.get("idusuario");
             const objetoId= queryParameters.get("idobjeto");
+            const payType= queryParameters.get("paymenttype");
+        
+            console.log(payType);
         
             setObjetoId(objetoId);
             setUsuarioId(userId);
+            setPaymentType(payType);
+            
+            if(payType === 'subscription'){
+                setPrice(16);
+                return
+            }
 
             try {
               const response = await axios.get(`https://3dmotores.com/pagos/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
@@ -83,7 +93,9 @@ function App() {
         setPaymentStatus();
         console.log(data)
     }
-    async function  onApprove (data) {
+    async function  onApproveSingle (data) {
+
+        console.log(data);
         try {
 
             const response =  await axios.post(`https://3dmotores.com/pagos/orders/capture?orderid=${data.orderID}`,JSON.stringify({
@@ -107,6 +119,64 @@ function App() {
 
     }
 
+    async function  onApproveSubscription(data) {
+
+        console.log(data);
+        setPaymentStatus(1);
+        // try {
+
+        //     const response =  await axios.post(`https://3dmotores.com/pagos/orders/capture?orderid=${data.orderID}`,JSON.stringify({
+        //         orderID: data.orderID,
+        //     }),);
+
+        //     if(response.status){
+        //         const response = await axios.post(`https://3dmotores.com/pagos/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
+        //         console.log(response);
+        //         if (response.status === 200) {
+        //             setPaymentStatus(1);
+        //             // Aquí puedes realizar acciones adicionales si es necesario
+        //         }
+        //     }            
+        // } catch (error) {
+            
+        // }
+
+    }
+    const ButtonWrapperSub = ({ type }) => {
+        const [{ options }, dispatch] = usePayPalScriptReducer();
+
+        useEffect(() => {
+            dispatch({
+                type: "resetOptions",
+                value: {
+                    ...options,
+                    intent: "subscription",
+                },
+            });
+        }, [type]);
+
+        return (<PayPalButtons
+            createSubscription={(data, actions) => {
+                console.log(data)
+                return actions.subscription
+                    .create({
+                        plan_id: "P-476637857J643871MMUKYUUQ",
+                    })
+                    .then((subscriptionId) => {
+                        // Your code here after create the order
+                        console.log(subscriptionId);
+                        return subscriptionId;
+                    });
+            }}
+            style={{
+                label: "subscribe",
+            }}
+            onApprove={onApproveSubscription}
+        />);
+    }
+
+
+
 // Custom component to wrap the PayPalButtons and show loading spinner
     const ButtonWrapper = ({ showSpinner }) => {
         const [{ isPending }] = usePayPalScriptReducer();
@@ -120,8 +190,9 @@ function App() {
                     forceReRender={[style]}
                     fundingSource={undefined}
                     createOrder={createOrder}
-                    onApprove={onApprove}
+                    onApprove={onApproveSingle}
                 />
+
             </>
         );
     }
@@ -151,8 +222,14 @@ function App() {
                 {infoProduct()}
 
               {
-                  paymentStatus === 3 && <PayPalScriptProvider  options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID, components: "buttons", currency: "USD" }}>
+                  (paymentStatus === 3 && paymentType === 'single') && <PayPalScriptProvider  options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID, components: "buttons", currency: "USD" }}>
                       <ButtonWrapper   style={{width:"600px"}} showSpinner={true} />
+                  </PayPalScriptProvider>
+              }
+
+              {
+                  (paymentStatus === 3 && paymentType === 'subscription') && <PayPalScriptProvider  options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID, components: "buttons", currency: "USD" , vault:true}}>
+                      <ButtonWrapperSub   style={{width:"600px"}} type='subscription' />
                   </PayPalScriptProvider>
               }
 
