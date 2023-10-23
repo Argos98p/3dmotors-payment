@@ -44,7 +44,10 @@ function App() {
         
             setObjetoId(objetoId);
             setUsuarioId(userId);
-            setPaymentType(payType);
+            
+            if(payType){
+                setPaymentType(payType);
+            }
             
             if(payType === 'subscription'){
                 setPrice(16);
@@ -160,7 +163,7 @@ function App() {
                 console.log(data)
                 return actions.subscription
                     .create({
-                        plan_id: "P-476637857J643871MMUKYUUQ",
+                        plan_id: "P-2PW54772A1930384PMUPONSA",
                     })
                     .then((subscriptionId) => {
                         // Your code here after create the order
@@ -172,6 +175,10 @@ function App() {
                 label: "subscribe",
             }}
             onApprove={onApproveSubscription}
+            onError={(err)=>{
+
+                console.log(err)
+            }}
         />);
     }
 
