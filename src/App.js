@@ -8,9 +8,6 @@ import successAnimation from "./assets/lottie_animations/successfully_payment.js
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
-import forge from 'node-forge';
-
-
 
 
 const style = {"color": "blue" ,"layout":"vertical"};
@@ -27,11 +24,25 @@ function App() {
      */
 
 
-     const [queryParameters] = useSearchParams();
-     const [price, setPrice] = useState(0);
-     const [usuarioId, setUsuarioId] = useState(0);
-     const [objetoId, setObjetoId] = useState(0);
-     const [paymentType, setPaymentType] = useState('single');
+    const [queryParameters] = useSearchParams();
+    const [price, setPrice] = useState(0);
+    const [usuarioId, setUsuarioId] = useState(0);
+    const [objetoId, setObjetoId] = useState(0);
+    const [paymentType, setPaymentType] = useState('single');
+    const [plan, setPlan] = useState('basic');
+
+    const prices = {
+        'basic': 4.99,
+        'ent-1':39.99,
+        'ent-2':89.99
+    }
+
+    const plansPaypalId = {
+        'ent-1': 'P-2CG79014TJ556663JMU4SQTY',
+        'ent-2': 'P-1MW84681WG616181NMU4SRKA'
+    }
+
+    
 
      useEffect(() => {
         const fetch = async () => {
@@ -39,6 +50,7 @@ function App() {
             const userId = queryParameters.get("idusuario");
             const objetoId= queryParameters.get("idobjeto");
             const payType= queryParameters.get("paymenttype");
+            const planType= queryParameters.get("plan");
         
             console.log(payType);
         
@@ -49,19 +61,23 @@ function App() {
                 setPaymentType(payType);
             }
             
-            if(payType === 'subscription'){
-                setPrice(16);
-                return
+            if(planType){
+                setPlan(planType);
             }
+            
+            // if(payType === 'subscription'){
+            //     setPrice(16);
+            //     return
+            // }
 
-            try {
-              const response = await axios.get(`https://3dmotores.com/pagos/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
-              setPrice(response.data);
-              console.log(response.data);
+            // try {
+            //   const response = await axios.get(`https://3dmotores.com/pagos/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
+              setPrice(prices[planType]);
+            //   console.log(response.data);
 
-            } catch (err) {
-              console.error(err);
-            }
+            // } catch (err) {
+            //   console.error(err);
+            // }
           };
           fetch();    
      }, [])
@@ -81,7 +97,7 @@ function App() {
                 cart: [
                     {
                         sku: "1blwyeo8",
-                        quantity: 2,
+                        quantity: 1,
                     },
                 ],
             }),
@@ -137,7 +153,7 @@ function App() {
         //         console.log(response);
         //         if (response.status === 200) {
         //             setPaymentStatus(1);
-        //             // Aquí puedes realizar acciones adicionales si es necesario
+        //             // Aquí puede2s realizar acciones adicionales si es necesario
         //         }
         //     }            
         // } catch (error) {
@@ -157,13 +173,19 @@ function App() {
                 },
             });
         }, [type]);
+        
+
+        console.log(plan);
+        console.log(plansPaypalId[plan]);
+
 
         return (<PayPalButtons
             createSubscription={(data, actions) => {
                 console.log(data)
                 return actions.subscription
                     .create({
-                        plan_id: "P-2PW54772A1930384PMUPONSA",
+                        plan_id: plansPaypalId[plan],
+                        // plan_id: 'P-2CG79014TJ556663JMU4SQTY'
                     })
                     .then((subscriptionId) => {
                         // Your code here after create the order
@@ -209,7 +231,7 @@ function App() {
             <img src='/payment/auto.jpeg' alt="logo"/>
             <div className='info'>
                 {
-                    (price>7.00)?<h3>Vehiculo con logo</h3>:<h3>Vehiculo </h3>
+                    (price>4.99)?<h3>Subscription</h3>:<h3>Vehiculo </h3>
                 }
                 
                 <p>${`${price}`}</p>
@@ -252,7 +274,7 @@ function App() {
                   paymentStatus === 0 && 
                   <>
                         <Lottie animationData={failedAnimation} loop={true} />
-                        <h2 className='blanco'>Erorr en el pago</h2>     
+                        <h2 className='blanco'>Error en el pago</h2>     
                         
                   </>
                   
