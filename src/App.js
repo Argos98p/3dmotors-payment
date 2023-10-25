@@ -234,7 +234,7 @@ function App() {
                     (price>4.99)?<h3>Subscription</h3>:<h3>Vehiculo </h3>
                 }
                 
-                <p>${`${price}`}</p>
+                <p>${`${price}`} + tax</p>
             </div>
         </div>
     }
