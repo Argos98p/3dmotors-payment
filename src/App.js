@@ -38,8 +38,8 @@ function App() {
     }
 
     const plansPaypalId = {
-        'ent-1': 'P-2CG79014TJ556663JMU4SQTY',
-        'ent-2': 'P-1MW84681WG616181NMU4SRKA'
+        'ent-1': 'P-0J256350K2567443AMU4ULKA',
+        'ent-2': 'P-69M2706842747852KMU4UK7Y'
     }
 
     
