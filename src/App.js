@@ -30,6 +30,7 @@ function App() {
     const [objetoId, setObjetoId] = useState(0);
     const [paymentType, setPaymentType] = useState('single');
     const [plan, setPlan] = useState('basic');
+    const [productId , setProductId] = useState(-1);
 
     const prices = {
         'basic': 4.99,
@@ -141,24 +142,24 @@ function App() {
     async function  onApproveSubscription(data) {
 
         console.log(data);
-        setPaymentStatus(1);
-        // try {
+        try {
 
-        //     const response =  await axios.post(`https://3dmotores.com/pagos/orders/capture?orderid=${data.orderID}`,JSON.stringify({
-        //         orderID: data.orderID,
-        //     }),);
+            const response =  await axios.post(`https://3dmotores.com/pagos/addsub?idusuario=${usuarioId}&idpaypal=${data['subscriptionID']}&idproducto=${productId}`);
 
-        //     if(response.status){
-        //         const response = await axios.post(`https://3dmotores.com/pagos/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
-        //         console.log(response);
-        //         if (response.status === 200) {
-        //             setPaymentStatus(1);
-        //             // Aquí puede2s realizar acciones adicionales si es necesario
-        //         }
-        //     }            
-        // } catch (error) {
+            if(response.status === 200 ){
+                // const response = await axios.post(`https://3dmotores.com/pagos/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
+                // console.log(response);
+                // if (response.status === 200) {
+                //     setPaymentStatus(1);
+                //     // Aquí puede2s realizar acciones adicionales si es necesario
+                // }
+                setPaymentStatus(1);
+            }            
+
+        } catch (error) {
             
-        // }
+            console.log(error);
+        }
 
     }
     const ButtonWrapperSub = ({ type }) => {
@@ -180,8 +181,25 @@ function App() {
 
 
         return (<PayPalButtons
-            createSubscription={(data, actions) => {
-                console.log(data)
+            createSubscription={ async (data, actions)  => {
+                
+
+                const response = await axios.get(`https://3dmotores.com/pagos/getplans`);
+                
+                var prodId = -1;
+
+                response.data.forEach( (planInfo)=>{
+                    if(planInfo['idPaypal'] === plansPaypalId[plan]){
+                        prodId = planInfo['id'];
+                    }
+                } )
+
+                if (prodId === -1){
+                    return null;
+                }else{
+                    setProductId(prodId);
+                }
+                
                 return actions.subscription
                     .create({
                         plan_id: plansPaypalId[plan],
@@ -189,14 +207,14 @@ function App() {
                     })
                     .then((subscriptionId) => {
                         // Your code here after create the order
-                        console.log(subscriptionId);
+                        // console.log(subscriptionId);
                         return subscriptionId;
                     });
             }}
             style={{
                 label: "subscribe",
             }}
-            onApprove={onApproveSubscription}
+            onApprove={(data)=>onApproveSubscription(data)}
             onError={(err)=>{
 
                 console.log(err)
