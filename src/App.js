@@ -124,6 +124,7 @@ function App() {
 
             if(response.status){
                 const response = await axios.post(`https://3dmotores.com/pagos/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
+                // const response = await axios.post(`http://192.168.18.17:8089/api/paypal/orders/verify?orderid=${data.orderID}&idusuario=${usuarioId}&app=vehiculos&idobjeto=${objetoId}`);
                 console.log(response);
                 if (response.status === 200) {
                     setPaymentStatus(1);
@@ -270,6 +271,7 @@ function App() {
 
               {
                   (paymentStatus === 3 && paymentType === 'single') && <PayPalScriptProvider  options={{ clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID, components: "buttons", currency: "USD" }}>
+                    
                       <ButtonWrapper   style={{width:"600px"}} showSpinner={true} />
                   </PayPalScriptProvider>
               }
