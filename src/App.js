@@ -71,14 +71,19 @@ function App() {
             //     return
             // }
 
-            // try {
-            //   const response = await axios.get(`https://3dmotores.com/pagos/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
-              setPrice(prices[planType]);
+            try {
+                if( payType !=='subscription'){
+                    const response = await axios.get(`https://3dmotores.com/pagos/getvaluetopay?idusuario=${userId}&app=vehiculos&idobjeto=${objetoId}`);
+                    setPrice(response.data);
+                }
+                else{
+                    setPrice(prices[planType]);
+                }
             //   console.log(response.data);
 
-            // } catch (err) {
+            } catch (err) {
             //   console.error(err);
-            // }
+            }
           };
           fetch();    
      }, [])
