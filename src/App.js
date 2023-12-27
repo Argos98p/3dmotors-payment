@@ -31,16 +31,24 @@ function App() {
     const [paymentType, setPaymentType] = useState('single');
     const [plan, setPlan] = useState('basic');
     const [productId , setProductId] = useState(-1);
+    const [subscriptionInfoArray, setSubscriptionInfoArray] = useState([]);
+
+  //   const reverseMaping = {
+  //   'ent-1':2, 
+  //   'ent-2':1, 
+  // }
 
     const prices = {
         'basic': 4.99,
         'ent-1':39.99,
-        'ent-2':89.99
+        'ent-2':89.99,
+        'ent-3':39.99,
     }
-
+    //
     const plansPaypalId = {
         'ent-1': 'P-0J256350K2567443AMU4ULKA',
-        'ent-2': 'P-69M2706842747852KMU4UK7Y'
+        'ent-2': 'P-69M2706842747852KMU4UK7Y',
+        'ent-3': 'P-26Y68262B0026461KMWBQHDI'
     }
 
     
@@ -70,6 +78,7 @@ function App() {
             //     setPrice(16);
             //     return
             // }
+      
 
             try {
                 if( payType !=='subscription'){
@@ -86,7 +95,7 @@ function App() {
             }
           };
           fetch();    
-     }, [])
+     })
      
 
 
