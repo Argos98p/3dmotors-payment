@@ -46,8 +46,8 @@ function App() {
     }
     //
     const plansPaypalId = {
-        'ent-1': 'P-0J256350K2567443AMU4ULKA',
-        'ent-2': 'P-69M2706842747852KMU4UK7Y',
+        'ent-1': 'P-8R45741837620923PMWHN56Y',
+        'ent-2': 'P-8UA39299EJ658072JMWHOCTI',
         'ent-3': 'P-26Y68262B0026461KMWBQHDI'
     }
 
